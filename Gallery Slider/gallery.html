@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider</title>
+    <!-- Include Slick CSS -->
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .gallery {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .main-image {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .main-image img {
+            width: 100%;
+            /* max-height: 400px; */
+            object-fit: cover;
+        }
+
+        .thumbnails {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .thumbnails img {
+            width: 100px;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        .thumbnails img.active {
+            border: 2px solid #000;
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            gap: 20px;
+        }
+
+        .arrow {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            cursor: pointer;
+            width: 12px;
+            height: 12px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot.active {
+            background-color: #717171;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="gallery">
+        <div class="main-image">
+            <img id="current"
+                src="https://upbeat-tank.flywheelsites.com/wp-content/uploads/2024/05/614-Kimbark-Street-Longmont-Slider-image-6.jpg"
+                alt="Main Image">
+        </div>
+        <div class="thumbnails">
+            <img src="https://upbeat-tank.flywheelsites.com/wp-content/uploads/2024/05/614-Kimbark-Street-Longmont-Slider-image-6.jpg"
+                alt="Thumbnail 1" class="thumb active">
+            <img src="https://upbeat-tank.flywheelsites.com/wp-content/uploads/2024/05/614-Kimbark-Street-Longmont-Slider-image-5.jpg"
+                alt="Thumbnail 2" class="thumb">
+            <img src="https://upbeat-tank.flywheelsites.com/wp-content/uploads/2024/05/614-Kimbark-Street-Longmont-Slider-image-6.jpg"
+                alt="Thumbnail 3" class="thumb">
+            <img src="https://upbeat-tank.flywheelsites.com/wp-content/uploads/2024/05/614-Kimbark-Street-Longmont-Slider-image-3.jpg"
+                alt="Thumbnail 4" class="thumb">
+        </div>
+        <div class="controls">
+            <span class="arrow left-arrow">&#9664;</span>
+            <div class="dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <span class="arrow right-arrow">&#9654;</span>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let currentIndex = 0;
+            const thumbnails = $('.thumb');
+            const dots = $('.dot');
+            const totalImages = thumbnails.length;
+            // alert(totalImages);
+            const intervalTime = 3000; // Change image every 3 seconds
+
+            function showImage(index) {
+                const newSrc = $(thumbnails[index]).attr('src');
+                $('#current').attr('src', newSrc);
+                thumbnails.removeClass('active');
+                $(thumbnails[index]).addClass('active');
+                dots.removeClass('active');
+                $(dots[index]).addClass('active');
+            }
+
+            function nextImage() {
+                currentIndex = (currentIndex + 1) % totalImages;
+                showImage(currentIndex);
+            }
+
+            function prevImage() {
+                currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+                showImage(currentIndex);
+            }
+
+            // Set initial image
+            showImage(currentIndex);
+
+            // Set interval for autoplay
+            let autoPlay = setInterval(nextImage, intervalTime);
+
+            // Pause autoplay on thumbnail click
+            thumbnails.click(function () {
+                clearInterval(autoPlay);
+                currentIndex = thumbnails.index(this);
+                showImage(currentIndex);
+                autoPlay = setInterval(nextImage, intervalTime);
+            });
+
+            // Navigate to image on dot click
+            dots.click(function () {
+                clearInterval(autoPlay);
+                currentIndex = dots.index(this);
+                showImage(currentIndex);
+                autoPlay = setInterval(nextImage, intervalTime);
+            });
+
+            // Navigate to next image on right arrow click
+            $('.right-arrow').click(function () {
+                clearInterval(autoPlay);
+                nextImage();
+                autoPlay = setInterval(nextImage, intervalTime);
+            });
+
+            // Navigate to previous image on left arrow click
+            $('.left-arrow').click(function () {
+                clearInterval(autoPlay);
+                prevImage();
+                autoPlay = setInterval(nextImage, intervalTime);
+            });
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>
